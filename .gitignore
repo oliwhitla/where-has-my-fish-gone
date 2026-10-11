@@ -1,0 +1,11 @@
+# The data/ folder is shared so everyone's code uses the same paths,
+# but the data inside it is never committed
+# It's DFO's data (confidential) and too big
+data/*
+!data/.gitkeep
+
+# files that should be ignored so they don't get committed by accident
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+.DS_Store
