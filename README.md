@@ -54,9 +54,13 @@ We need:
 - Labelled regions: `.evr`, `.evl`
 
 `.01A` file is raw data (I believe over 1 week)
+
 `.xml` config/calibration file that defines the instrument set up (frequencies, calibration, pulse lengths?) for a set of `.01A` files. 
+
 `.ev`  the main Echoview file. It links to the raw `.01A` files and holds all the processing: noise reduction, labelled regions (classes), and the fixed bottom and surface lines 
+
 `.evr` 2D region definitions. It's a text file listing every labelled region as points (time + depth) plus its label
+
 `.evl`line definitions (e.g. the bottom or surface line). Also exported from Echoview as text 
 
 We can only open `.ev` files in Echoview, which we don't have. So if there is only a `.ev` file available we will need
