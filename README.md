@@ -61,7 +61,7 @@ We need:
 
 `.evr` 2D region definitions. It's a text file listing every labelled region as points (time + depth) plus its label
 
-`.evl`line definitions (e.g. the bottom or surface line). Also exported from Echoview as text 
+`.evl` line definitions (e.g. the bottom or surface line). Also exported from Echoview as text 
 
 We can only open `.ev` files in Echoview, which we don't have. So if there is only a `.ev` file available we will need
 to ask my friend to export the `.evr` files (and ideally `.evl` for the bottom/surface lines). Those are what we can actually read in Python.
