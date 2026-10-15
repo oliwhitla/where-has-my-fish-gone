@@ -50,8 +50,8 @@ We'll probably start with daytime data.
 We have 4 TB of data dating back X? amount of years.
 
 We need: 
-- Raw: `.01A`, `.xml`
-- Labelled regions: `.evr`, `.evl`
+- Raw: `.01A`, `.xml`, `.dpl`
+- Labelled regions: `.evr`
 
 `.01A` file is raw data (I believe over 1 week)
 
@@ -61,15 +61,11 @@ We need:
 
 `.evr` 2D region definitions. It's a text file listing every labelled region as points (time + depth) plus its label
 
-`.evl` line definitions (e.g. the bottom or surface line). Also exported from Echoview as text 
+We can only open `.ev` files in Echoview, which we don't have. All `.ev` files have a `.evr`  that we can export. 
 
-We can only open `.ev` files in Echoview, which we don't have. So if there is only a `.ev` file available we will need
-to ask my friend to export the `.evr` files (and ideally `.evl` for the bottom/surface lines). Those are what we can actually read in Python.
+I looked at the data and they haven't exported their `.evr` files so I will need to spend an hour doing that on a DFO Laptop. 
 
-The labels `.evr` and the echo data `.01A` are stored in separate files, and the only thing linking them is time. To build training examples, we need to find the raw file that covers each region's time range so we can cut that region out of the echogram and pair it with its label. 
-
-I'll run a script to pull a small sample (a couple of labelled regions and their raw files) off the SSD, so we can build and test things without needing the drive. 
-
+Raw data (`.01A`) is stored in monthly folders. Echoview files with drawn regions (`.evr`) are split into weekly files. To build training examples we'll match by timestamp: for each region in weekly, find the raw files whose ranges covers it. 
 
 
 
