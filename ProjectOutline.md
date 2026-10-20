@@ -26,8 +26,8 @@ Data analysis
 We're working with echosounder data from Fisheries and Oceans Canada (DFO), shared with their permission. The full dataset is 4 TB and covers DFO's moored surveys from 2022 to 2025 at several sites on the BC coast, including Barkley Canyon, Brooks Peninsula, Bamfield, and the Malaspina Strait. It includes both the raw echosounder data and the files from DFO's Echoview processing.
 
 We're only using data from DFO's Acoustic Zooplankton Fish Profiler (AZFP) echosounders.
-It's moored near the seafloor, looking up, for a year (DFO's deployments run 365 days), pinging at two frequencies ~ 67 kHz and ~120-125 kHz. Everything is saved to a memory card as .01A files.
-Each deployment comes with the raw .01A data files, an .XML and a .DPL file with the instrument settings and calibration. The labeled regions (.evr) and surface/ bottom lines (.evl) from Echoview give us our training labels.
+It's moored near the seafloor, looking up, for a year (DFO's deployments run 365 days), pinging at two frequencies ~ 67 kHz and ~ 120-125 kHz. Everything is saved to a memory card as .01A files.
+Each deployment comes with the raw `.01A` data files, an .XML and a .DPL file with the instrument settings and calibration. The labeled regions (`.evr`) and surface/ bottom lines (`.evl`) from Echoview give us our training labels.
 
 ## 5. Proposed Methodology
 
@@ -82,16 +82,16 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 **Preprocessing**
 
 **Objective 1: Data inventory, conversion, and label audit**
-- PI1 (basic): Verify the annotations. DFO reports that the deployments have been annotated in Echoview. Export .evr regions, then count classed regions per species, site and deployment week
-- PI2 (basic): Convert one deployment's .01A files to SV with echopype using its .XML/ .DPL calibration. Save as NetCDF/Zarr
-- PI3 (basic): Parse .evr files with echoregions (OSOceanAcoustics, n.d.). Produce a table of every region (site, deployment, start/ end time, depth range, class, region type)
+- PI1 (basic): Verify the annotations. DFO reports that the deployments have been annotated in Echoview. Export `.evr` regions, then count classed regions per species, site and deployment week
+- PI2 (basic): Convert one deployment's .01A files to SV with echopype using its `.XML`/ `.DPL` calibration. Save as NetCDF/Zarr
+- PI3 (basic): Parse `.evr` files with echoregions (OSOceanAcoustics, n.d.). Produce a table of every region (site, deployment, start/ end time, depth range, class, region type)
 - PI4 (expected): Check that region time and depths line up with the Sv data. Check time zones (Echoview vs AZFP clock) and the depth reference and confirm visually on echograms
 - PI5 (expected/ advanced): scale conversion to all sites and years with Dask/ Zarr chunking. Document calibration and instrument differences between deployments like frequency, ping rate, and bin size (Lee et al., 2024)
 
 **Objective 2: Boundary removal**
 - PI1 (basic): Flag and remove bad pings, gaps and "bad data" regions
-- PI2 (basic): Mask the surface and near-field using .evl lines where they exist
-- PI3 (expected): Implement automatic surface detection for periods with no .evl lines. First test the Echofilter model (Lowe et al., 2022) and then try a detector based on high-frequency Sv gradient (Slonimer, 2022).
+- PI2 (basic): Mask the surface and near-field using `.evl` lines where they exist
+- PI3 (expected): Implement automatic surface detection for periods with no `.evl` lines. First test the Echofilter model (Lowe et al., 2022) and then try a detector based on high-frequency Sv gradient (Slonimer, 2022).
 - PI4 (expected): Validate it against the existing Echoview .evl lines
 - PI5 (expected/ advanced): Seafloor or obstruction masking if needed (echopype detect_seafloor)
 
@@ -180,6 +180,10 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 
 > Technical documentation listing the raw file types Echopype supports, including AZFP (.01A) files, which require the deployment's .XML file for conversion via the `sonar_model="AZFP"` setting.
 
+**He, K., Zhang, X., Ren, S., & Sun, J. (2016).** Deep residual learning for image recognition. In *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)* (pp. 770–778). https://doi.org/10.1109/CVPR.2016.90
+
+> Introduces ResNet, a CNN architecture. ResNet-18, the smallest version, is the pretrained backbone we fine-tune for species classification.
+
 **Johannesson, K. A., & Mitson, R. B. (1983).** *Fisheries acoustics: A practical manual for aquatic biomass estimation* (FAO Fisheries Technical Paper No. 240). Food and Agriculture Organization of the United Nations.
 
 > Foundational FAO manual on using echosounders to estimate fish biomass, including the early history of acoustic fish detection cited in our overview.
@@ -189,23 +193,30 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 > Paper from the Echopype developers describing the open-source Python package that converts raw echosounder data (including AZFP) into a standard netCDF/Zarr format and computes Sv. Built on xarray with Dask, so it scales from a laptop to the cloud for large datasets like ours.
 
 **Lowe, S. C., McGarry, L. P., Douglas, J., Newport, J., Oore, S., Whidden, C., & Hasselman, D. J. (2022).** Echofilter: A deep learning segmentation model improves the automation, standardization, and timeliness for post-processing echosounder data in tidal energy streams. *Frontiers in Marine Science*, 9. https://doi.org/10.3389/fmars.2022.867857
-> Echofilter is an open-source deep-learning tool that draws boundary lines you'd otherwise draw by hand in Echoview for upward-looking moorings. It was trained on Simrad EK80 data, not AZFP, so signal and noise will differ and it might work less well without retraining. 
 
+> Echofilter is an open-source deep-learning tool that draws boundary lines you'd otherwise draw by hand in Echoview for upward-looking moorings. It was trained on Simrad EK80 data, not AZFP, so signal and noise will differ and it might work less well without retraining.
 
 **Marques, T. P., Cote, M., Rezvanifar, A., Branzan Albu, A., Ersahin, K., Mudge, T., & Gauthier, S. (2021).** Instance segmentation-based identification of pelagic species in acoustic backscatter data. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*. https://openaccess.thecvf.com/content/CVPR2021W/PBVS/papers/Marques_Instance_Segmentation-Based_Identification_of_Pelagic_Species_in_Acoustic_Backscatter_Data_CVPRW_2021_paper.pdf
 
 **OSOceanAcoustics. (n.d.).** *Echoregions* [Computer software]. GitHub. https://github.com/OSOceanAcoustics/echoregions
 
-> Open-source Python library that reads Echoview region (.evr) and line (.evl) files and converts them into masks aligned with Echopype Sv data. Links DFO's Echoview labels to our processed data.
+> Open-source Python library that reads Echoview region (`.evr`) and line (`.evl`) files and converts them into masks aligned with Echopype Sv data. Links DFO's Echoview labels to our processed data.
 
 **Pala, A., Oleynik, A., Malde, K., & Handegard, N. O. (2024).** Self-supervised feature learning for acoustic data analysis. *Ecological Informatics*, 84, 102878. https://doi.org/10.1016/j.ecoinf.2024.102878
 
 **Rezvanifar, A., Marques, T. P., Cote, M., Branzan Albu, A., Slonimer, A., Tolhurst, T., Ersahin, K., Mudge, T., & Gauthier, S. (2019).** A deep learning-based framework for the detection of schools of herring in echograms. *NeurIPS 2019 Workshop on Tackling Climate Change with Machine Learning*. arXiv:1910.08215. https://arxiv.org/abs/1910.08215
-> A two-stage system on AZFP data from Discovery Passage, BC: a rule-based detector (median filtering, adaptive thresholding, morphological opening/closing, dropping small or flat blobs) proposes regions, then a CNN classifies each as herring or background. DenseNet201 performed best (F1 ~ 0.82). 
+
+> A two-stage system on AZFP data from Discovery Passage, BC: a rule-based detector (median filtering, adaptive thresholding, morphological opening/closing, dropping small or flat blobs) proposes regions, then a CNN classifies each as herring or background. DenseNet201 performed best (F1 ~ 0.82).
 
 **Rousseau, S., Gauthier, S., Johnson, S., Neville, C., & Trudel, M. (2018).** *Juvenile salmon acoustic monitoring in the Discovery Islands, British Columbia* (Canadian Technical Report of Fisheries and Aquatic Sciences 3277). Fisheries and Oceans Canada.
 
 **Rousseau, S., Gauthier, S., Neville, C., Johnson, S., & Trudel, M. (2022).** Acoustic classification of juvenile Pacific salmon (*Oncorhynchus* spp) and Pacific herring (*Clupea pallasii*) schools using random forests. *Frontiers in Marine Science*, 9, 857645. https://doi.org/10.3389/fmars.2022.857645
 
-**Slonimer, A. (2022).** *Automatic classification of fish and bubbles at pixel-level precision in multi-frequency acoustic echograms using U-Net convolutional neural networks* [Master's
+**Selvaraju, R. R., Cogswell, M., Das, A., Vedantam, R., Parikh, D., & Batra, D. (2017).** Grad-CAM: Visual explanations from deep networks via gradient-based localization. In *Proceedings of the IEEE International Conference on Computer Vision (ICCV)* (pp. 618–626). https://doi.org/10.1109/ICCV.2017.74
+
+> Introduces Grad-CAM, which produces a heatmap showing which parts of an image a CNN relied on for its prediction. We use it to check that our CNN focuses on the fish school rather than the surface or background.
+
+**Slonimer, A. (2022).** *Automatic classification of fish and bubbles at pixel-level precision in multi-frequency acoustic echograms using U-Net convolutional neural networks* [Master's thesis, University of Victoria]. http://hdl.handle.net/1828/13850
+
+**Slonimer, A. L., Dosso, S. E., Branzan Albu, A., Cote, M., Marques, T. P., Rezvanifar, A., & Ersahin, K. (2023).** Classification of herring, salmon, and bubbles in multifrequency echograms using U-Net neural networks. *IEEE Journal of Oceanic Engineering*, 48(4), 1236–1254. https://doi.org/10.1109/JOE.2023.3272393
 
