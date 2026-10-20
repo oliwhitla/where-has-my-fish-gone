@@ -69,8 +69,6 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 
 ## 9. Related Work
 
-## 9. Related Work
-
 **Classification**
 
 - **Rousseau et al. (2022):** DFO study using a seafloor-mounted, upward-looking, multi-frequency AZFP in Okisollo Channel (Discovery Islands), the same setup as our data. A random forest on per-school acoustic, shape and depth features separated juvenile salmon from herring with 98% accuracy, using daytime data only, background noise removal and a multi-frequency fish mask. Our RF baseline, feature set and fish mask follow this paper. 
