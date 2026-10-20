@@ -17,10 +17,6 @@ Build and compare a random forest and a CNN that classify fish species in labell
 - Test how well both trained models generalize to a second, unseen site without retraining
 - Develop a visualization dashboard to demonstrate the classification results
 
-## 3. Motivation
-
-Data analysis
-
 ## 4. Dataset Description
 
 We're working with echosounder data from Fisheries and Oceans Canada (DFO), shared with their permission. The full dataset is 4 TB and covers DFO's moored surveys from 2022 to 2025 at several sites on the BC coast, including Barkley Canyon, Brooks Peninsula, Bamfield, and the Malaspina Strait. It includes both the raw echosounder data and the files from DFO's Echoview processing.
