@@ -69,20 +69,11 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 
 ## 9. Related Work
 
-**Classification**
-
 - **Rousseau et al. (2022):** DFO study using a seafloor-mounted, upward-looking, multi-frequency AZFP in Okisollo Channel (Discovery Islands), the same setup as our data. A random forest on per-school acoustic, shape and depth features separated juvenile salmon from herring with 98% accuracy, using daytime data only, background noise removal and a multi-frequency fish mask. Our RF baseline, feature set and fish mask follow this paper. 
 - **Marques et al. (2021):** Uses Mask R-CNN to outline herring and juvenile salmon schools in 67 kHz echograms from DFO's seafloor AZFP in Okisollo Channel, with 153 herring and 252 salmon examples. Training from scratch performed poorly, so the model started from pretrained weights (transfer learning), which supports our use of a pretrained ResNet-18. 
 - **Slonimer (2022); Slonimer et al. (2023):** Trains a U-Net to label every echogram pixel as herring, salmon, bubbles, surface or background, using AZFP data at 67, 125, 200 and 455 kHz stacked as input channels plus depth and solar elevation channels. Reached F1 scores of 93.0% (herring), 87.3% (salmon) and 86.5% (bubbles), and the added depth and solar elevation channels improved accuracy. Source for our fixed dB scaling, context channels and surface detection approach. 
 - **Pala et al. (2024):** Their model first learns from unlabelled echogram patches, then is fine-tuned on the few labelled ones. Open-source code exists. Relevant because most of our year-long recordings are unlabelled. 
 
-**Detection + Classification**
-
-- **Rezvanifar et al. (2019):** A two-stage system on AZFP data from Discovery Passage, BC: a rule-based detector (median filtering, adaptive thresholding, morphological opening/closing, dropping small or flat blobs) proposes regions, then a CNN classifies each as herring or background. DenseNet201 performed best (F1 ≈ 0.82). Relevant to our stretch goal of automatic school detection. *Workshop paper.*
-
-**Preprocessing**
-
-- **Lowe et al. (2022):** Echofilter is an open-source deep-learning tool that draws boundary lines you'd otherwise draw by hand in Echoview for upward-looking moorings. It was trained on Simrad EK80 data, not AZFP, so signal and noise will differ and it might work less well without retraining. 
 
 ## 10. Individual Objectives
 
@@ -198,6 +189,8 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 > Paper from the Echopype developers describing the open-source Python package that converts raw echosounder data (including AZFP) into a standard netCDF/Zarr format and computes Sv. Built on xarray with Dask, so it scales from a laptop to the cloud for large datasets like ours.
 
 **Lowe, S. C., McGarry, L. P., Douglas, J., Newport, J., Oore, S., Whidden, C., & Hasselman, D. J. (2022).** Echofilter: A deep learning segmentation model improves the automation, standardization, and timeliness for post-processing echosounder data in tidal energy streams. *Frontiers in Marine Science*, 9. https://doi.org/10.3389/fmars.2022.867857
+> Echofilter is an open-source deep-learning tool that draws boundary lines you'd otherwise draw by hand in Echoview for upward-looking moorings. It was trained on Simrad EK80 data, not AZFP, so signal and noise will differ and it might work less well without retraining. 
+
 
 **Marques, T. P., Cote, M., Rezvanifar, A., Branzan Albu, A., Ersahin, K., Mudge, T., & Gauthier, S. (2021).** Instance segmentation-based identification of pelagic species in acoustic backscatter data. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*. https://openaccess.thecvf.com/content/CVPR2021W/PBVS/papers/Marques_Instance_Segmentation-Based_Identification_of_Pelagic_Species_in_Acoustic_Backscatter_Data_CVPRW_2021_paper.pdf
 
@@ -208,10 +201,9 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 **Pala, A., Oleynik, A., Malde, K., & Handegard, N. O. (2024).** Self-supervised feature learning for acoustic data analysis. *Ecological Informatics*, 84, 102878. https://doi.org/10.1016/j.ecoinf.2024.102878
 
 **Rezvanifar, A., Marques, T. P., Cote, M., Branzan Albu, A., Slonimer, A., Tolhurst, T., Ersahin, K., Mudge, T., & Gauthier, S. (2019).** A deep learning-based framework for the detection of schools of herring in echograms. *NeurIPS 2019 Workshop on Tackling Climate Change with Machine Learning*. arXiv:1910.08215. https://arxiv.org/abs/1910.08215
+> A two-stage system on AZFP data from Discovery Passage, BC: a rule-based detector (median filtering, adaptive thresholding, morphological opening/closing, dropping small or flat blobs) proposes regions, then a CNN classifies each as herring or background. DenseNet201 performed best (F1 ~ 0.82). 
 
 **Rousseau, S., Gauthier, S., Johnson, S., Neville, C., & Trudel, M. (2018).** *Juvenile salmon acoustic monitoring in the Discovery Islands, British Columbia* (Canadian Technical Report of Fisheries and Aquatic Sciences 3277). Fisheries and Oceans Canada.
-
-> DFO technical report describing the use of moored AZFPs to monitor juvenile salmon migration in the Discovery Islands and Johnstone Strait. Background for the instrument and monitoring approach used in our dataset.
 
 **Rousseau, S., Gauthier, S., Neville, C., Johnson, S., & Trudel, M. (2022).** Acoustic classification of juvenile Pacific salmon (*Oncorhynchus* spp) and Pacific herring (*Clupea pallasii*) schools using random forests. *Frontiers in Marine Science*, 9, 857645. https://doi.org/10.3389/fmars.2022.857645
 
