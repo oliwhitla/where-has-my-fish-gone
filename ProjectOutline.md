@@ -40,7 +40,7 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 ## 6. Tools and Technologies
 
 - **Python and Echopype:** Echopype is an open-source Python library for interoperable and scalable echosounder data processing (Lee et al., 2024). It supports conversion of raw AZFP echosounder data files (.01A) into standardized NetCDF datasets which can then be analyzed and processed (Echopype Developers, 2024). It allows for integration with Python machine learning libraries which makes it suitable for this project.
-- **Echofilter:** open-source deep-learning tool that detects the surface in upward looking echosounder data (Lowe et al., 2022).
+- **Echofilter:** open-source deep-learning tool that detects the surface in upward looking echosounder data 
 - **Xarray, Dask and Zarr:** Echopype is built on xarray; Zarr stores data in compressed chunks and Dask processes those chunks in parallel (Lee et al., 2024)
 - **NumPy, Scipy and scikit-image:** used for array processing, filtering and morphological operations
 - **Pvlib or astral:** calculate solar elevation from ping timestamps and mooring coordinates
@@ -69,7 +69,22 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 
 ## 9. Related Work
 
-See section 11 for references and summaries of related papers.
+## 9. Related Work
+
+**Classification**
+
+- **Rousseau et al. (2022):** DFO study using a seafloor-mounted, upward-looking, multi-frequency AZFP in Okisollo Channel (Discovery Islands), the same setup as our data. A random forest on per-school acoustic, shape and depth features separated juvenile salmon from herring with 98% accuracy, using daytime data only, background noise removal and a multi-frequency fish mask. Our RF baseline, feature set and fish mask follow this paper. *Peer reviewed.*
+- **Marques et al. (2021):** Uses Mask R-CNN to outline herring and juvenile salmon schools in 67 kHz echograms from DFO's seafloor AZFP in Okisollo Channel, with 153 herring and 252 salmon examples. Training from scratch performed poorly, so the model started from pretrained weights (transfer learning), which supports our use of a pretrained ResNet-18. *Peer-reviewed workshop paper.*
+- **Slonimer (2022); Slonimer et al. (2023):** Trains a U-Net to label every echogram pixel as herring, salmon, bubbles, surface or background, using AZFP data at 67, 125, 200 and 455 kHz stacked as input channels plus depth and solar elevation channels. Reached F1 scores of 93.0% (herring), 87.3% (salmon) and 86.5% (bubbles), and the added depth and solar elevation channels improved accuracy. Source for our fixed dB scaling, context channels and surface detection approach. *The 2022 thesis is not peer reviewed; the 2023 journal version is.*
+- **Pala et al. (2024):** Their model first learns from unlabelled echogram patches, then is fine-tuned on the few labelled ones. Open-source code exists. Relevant because most of our year-long recordings are unlabelled. *Peer reviewed.*
+
+**Detection + Classification**
+
+- **Rezvanifar et al. (2019):** A two-stage system on AZFP data from Discovery Passage, BC: a rule-based detector (median filtering, adaptive thresholding, morphological opening/closing, dropping small or flat blobs) proposes regions, then a CNN classifies each as herring or background. DenseNet201 performed best (F1 ≈ 0.82). Relevant to our stretch goal of automatic school detection. *Workshop paper.*
+
+**Preprocessing**
+
+- **Lowe et al. (2022):** Echofilter is an open-source deep-learning tool that draws boundary lines you'd otherwise draw by hand in Echoview for upward-looking moorings. It was trained on Simrad EK80 data, not AZFP, so signal and noise will differ and it might work less well without retraining. *Peer reviewed.*
 
 ## 10. Individual Objectives
 
@@ -172,43 +187,35 @@ See section 11 for references and summaries of related papers.
 
 ## 11. References
 
-### Classification
+**Echopype Developers. (2024).** *Converting raw files*. Echopype documentation. https://echopype.readthedocs.io/en/stable/convert.html#supported-raw-file-types
 
-**Rousseau, S., Gauthier, S., Neville, C., Johnson, S., & Trudel, M. (2022).** Acoustic classification of juvenile Pacific salmon (*Oncorhynchus* spp) and Pacific herring (*Clupea pallasii*) schools using random forests. *Frontiers in Marine Science*, 9, 857645. https://doi.org/10.3389/fmars.2022.857645
+> Technical documentation listing the raw file types Echopype supports, including AZFP (.01A) files, which require the deployment's .XML file for conversion via the `sonar_model="AZFP"` setting.
 
-> DFO study using a seafloor-mounted, upward-looking, multi-frequency AZFP in Okisollo Channel (Discovery Islands), the same setup as our data. A random forest on per-school acoustic, shape and depth features separated juvenile salmon from herring with 98% accuracy, using daytime data only, background noise removal and a multi-frequency fish mask. Our RF baseline, feature set and fish mask follow this paper. *Peer reviewed.*
+**Johannesson, K. A., & Mitson, R. B. (1983).** *Fisheries acoustics: A practical manual for aquatic biomass estimation* (FAO Fisheries Technical Paper No. 240). Food and Agriculture Organization of the United Nations.
 
-**Marques, T. P., Cote, M., Rezvanifar, A., Branzan Albu, A., Ersahin, K., Mudge, T., & Gauthier, S. (2021).** Instance segmentation-based identification of pelagic species in acoustic backscatter data. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*. https://openaccess.thecvf.com/content/CVPR2021W/PBVS/papers/Marques_Instance_Segmentation-Based_Identification_of_Pelagic_Species_in_Acoustic_Backscatter_Data_CVPRW_2021_paper.pdf
-
-> Uses Mask R-CNN to outline herring and juvenile salmon schools in 67 kHz echograms from DFO's seafloor AZFP in Okisollo Channel, with 153 herring and 252 salmon examples. Training from scratch performed poorly, so the model started from pretrained weights (transfer learning), which supports our use of a pretrained ResNet-18. *Peer-reviewed workshop paper.*
-
-**Slonimer, A. (2022).** *Automatic classification of fish and bubbles at pixel-level precision in multi-frequency acoustic echograms using U-Net convolutional neural networks* [Master's thesis, University of Victoria]. http://hdl.handle.net/1828/13850
-
-> Trains a U-Net to label every echogram pixel as herring, salmon, bubbles, surface or background, using AZFP data at 67, 125, 200 and 455 kHz stacked as input channels plus depth and solar elevation channels. Reached F1 scores of 93.0% (herring), 87.3% (salmon) and 86.5% (bubbles). Source for our fixed dB scaling, context channels and surface detection approach. *Thesis, not peer reviewed.*
-
-**Slonimer, A. L., Dosso, S. E., Branzan Albu, A., Cote, M., Marques, T. P., Rezvanifar, A., & Ersahin, K. (2023).** Classification of herring, salmon, and bubbles in multifrequency echograms using U-Net neural networks. *IEEE Journal of Oceanic Engineering*, 48(4), 1236–1254. https://doi.org/10.1109/JOE.2023.3272393
-
-> The peer-reviewed journal version of the thesis above. Shows that adding depth and solar elevation channels improved classification accuracy, which supports our context channels. *Peer reviewed.*
-
-**Pala, A., Oleynik, A., Malde, K., & Handegard, N. O. (2024).** Self-supervised feature learning for acoustic data analysis. *Ecological Informatics*, 84, 102878. https://doi.org/10.1016/j.ecoinf.2024.102878
-
-> Their model first learns from unlabelled echogram patches, then is fine-tuned on the few labelled ones. Open-source code exists. Relevant because most of our year-long recordings are unlabelled. *Peer reviewed.*
-
-
-**Rezvanifar, A., Marques, T. P., Cote, M., Branzan Albu, A., Slonimer, A., Tolhurst, T., Ersahin, K., Mudge, T., & Gauthier, S. (2019).** A deep learning-based framework for the detection of schools of herring in echograms. *NeurIPS 2019 Workshop on Tackling Climate Change with Machine Learning*. arXiv:1910.08215. https://arxiv.org/abs/1910.08215
-
-> A two-stage system on AZFP data from Discovery Passage, BC: a rule-based detector (median filtering, adaptive thresholding, morphological opening/closing, dropping small or flat blobs) proposes regions, then a CNN classifies each as herring or background. DenseNet201 performed best (F1 ≈ 0.82). Relevant to our stretch goal of automatic school detection. *Workshop paper.*
-
-### Preprocessing Tools
+> Foundational FAO manual on using echosounders to estimate fish biomass, including the early history of acoustic fish detection cited in our overview.
 
 **Lee, W.-J., Setiawan, L., Tuguinay, C., Mayorga, E., & Staneva, V. (2024).** Interoperable and scalable echosounder data processing with Echopype. *ICES Journal of Marine Science*, 81(10), 1941–1951. https://doi.org/10.1093/icesjms/fsae133
 
 > Paper from the Echopype developers describing the open-source Python package that converts raw echosounder data (including AZFP) into a standard netCDF/Zarr format and computes Sv. Built on xarray with Dask, so it scales from a laptop to the cloud for large datasets like ours. *Peer reviewed.*
 
-**Echopype Developers. (2024).** *Converting raw files*. Echopype documentation. https://echopype.readthedocs.io/en/stable/convert.html#supported-raw-file-types
+**Lowe, S. C., McGarry, L. P., Douglas, J., Newport, J., Oore, S., Whidden, C., & Hasselman, D. J. (2022).** Echofilter: A deep learning segmentation model improves the automation, standardization, and timeliness for post-processing echosounder data in tidal energy streams. *Frontiers in Marine Science*, 9. https://doi.org/10.3389/fmars.2022.867857
 
-> Technical documentation listing the raw file types Echopype supports, including AZFP (.01A) files, which require the deployment's .XML file for conversion via the `sonar_model="AZFP"` setting.
+**Marques, T. P., Cote, M., Rezvanifar, A., Branzan Albu, A., Ersahin, K., Mudge, T., & Gauthier, S. (2021).** Instance segmentation-based identification of pelagic species in acoustic backscatter data. In *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops (CVPRW)*. https://openaccess.thecvf.com/content/CVPR2021W/PBVS/papers/Marques_Instance_Segmentation-Based_Identification_of_Pelagic_Species_in_Acoustic_Backscatter_Data_CVPRW_2021_paper.pdf
 
 **OSOceanAcoustics. (n.d.).** *Echoregions* [Computer software]. GitHub. https://github.com/OSOceanAcoustics/echoregions
 
-> Open-source
+> Open-source Python library that reads Echoview region (.evr) and line (.evl) files and converts them into masks aligned with Echopype Sv data. Links DFO's Echoview labels to our processed data.
+
+**Pala, A., Oleynik, A., Malde, K., & Handegard, N. O. (2024).** Self-supervised feature learning for acoustic data analysis. *Ecological Informatics*, 84, 102878. https://doi.org/10.1016/j.ecoinf.2024.102878
+
+**Rezvanifar, A., Marques, T. P., Cote, M., Branzan Albu, A., Slonimer, A., Tolhurst, T., Ersahin, K., Mudge, T., & Gauthier, S. (2019).** A deep learning-based framework for the detection of schools of herring in echograms. *NeurIPS 2019 Workshop on Tackling Climate Change with Machine Learning*. arXiv:1910.08215. https://arxiv.org/abs/1910.08215
+
+**Rousseau, S., Gauthier, S., Johnson, S., Neville, C., & Trudel, M. (2018).** *Juvenile salmon acoustic monitoring in the Discovery Islands, British Columbia* (Canadian Technical Report of Fisheries and Aquatic Sciences 3277). Fisheries and Oceans Canada.
+
+> DFO technical report describing the use of moored AZFPs to monitor juvenile salmon migration in the Discovery Islands and Johnstone Strait. Background for the instrument and monitoring approach used in our dataset.
+
+**Rousseau, S., Gauthier, S., Neville, C., Johnson, S., & Trudel, M. (2022).** Acoustic classification of juvenile Pacific salmon (*Oncorhynchus* spp) and Pacific herring (*Clupea pallasii*) schools using random forests. *Frontiers in Marine Science*, 9, 857645. https://doi.org/10.3389/fmars.2022.857645
+
+**Slonimer, A. (2022).** *Automatic classification of fish and bubbles at pixel-level precision in multi-frequency acoustic echograms using U-Net convolutional neural networks* [Master's
+
