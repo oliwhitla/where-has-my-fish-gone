@@ -172,6 +172,10 @@ Each deployment comes with the raw `.01A` data files, an `.XML` and a `.DPL` fil
 
 ## 11. References
 
+**Breiman, L. (2001).** Random forests. *Machine Learning*, 45(1), 5–32. https://doi.org/10.1023/A:1010933404324
+
+> Introduces the random forest, a classifier that combines many decision trees trained on random subsets of the data and features. It is the baseline model we compare against the CNN.
+
 **Echopype Developers. (2024).** *Converting raw files*. Echopype documentation. https://echopype.readthedocs.io/en/stable/convert.html#supported-raw-file-types
 
 > Technical documentation listing the raw file types Echopype supports, including AZFP (.01A) files, which require the deployment's .XML file for conversion via the `sonar_model="AZFP"` setting.
