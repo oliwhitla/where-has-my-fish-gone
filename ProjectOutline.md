@@ -46,7 +46,7 @@ Each deployment comes with the raw .01A data files, an .XML and a .DPL file with
 - **Pvlib or astral:** calculate solar elevation from ping timestamps and mooring coordinates
 - **Pytorch and torchvision:** used to build and train CNN
 - **Pytorch-grad-cam:** Grad-CAM heatmaps for the CNN
-- **GPU access:**
+- **GPU access**
 
 ## 7. Evaluation Metrics
 
