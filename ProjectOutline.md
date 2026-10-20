@@ -23,7 +23,7 @@ We're working with echosounder data from Fisheries and Oceans Canada (DFO), shar
 
 We're only using data from DFO's Acoustic Zooplankton Fish Profiler (AZFP) echosounders.
 It's moored near the seafloor, looking up, for a year (DFO's deployments run 365 days), pinging at two frequencies ~ 67 kHz and ~ 120-125 kHz. Everything is saved to a memory card as .01A files.
-Each deployment comes with the raw `.01A` data files, an .XML and a .DPL file with the instrument settings and calibration. The labeled regions (`.evr`) and surface/ bottom lines (`.evl`) from Echoview give us our training labels.
+Each deployment comes with the raw `.01A` data files, an `.XML` and a `.DPL` file with the instrument settings and calibration. The labeled regions (`.evr`) and surface/ bottom lines (`.evl`) from Echoview give us our training labels.
 
 ## 5. Proposed Methodology
 
