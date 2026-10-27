@@ -17,6 +17,6 @@ The data is confidential and too big, so it isn't in the repo.
 
 1. Clone the repo
 2. Ask me for the sample files
-3. Put them in `data/`, keeping the folder structure (e.g. `data/date/raw/`, `data/date/labels/`)
+3. Put them in `data/`, keeping the folder structure 
 
 
